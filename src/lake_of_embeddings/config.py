@@ -36,16 +36,24 @@ def load_config(path: Path) -> Config:
     with open(path) as f:
         raw = yaml.safe_load(f)
 
+    if raw is None:
+        raw = {}
+
     sources = []
-    for src in raw.get("sources", []):
-        sources.append(SourceConfig(
-            type=src["type"],
-            name=src["name"],
-            path=Path(src["path"]).expanduser(),
-            table=src.get("table"),
-            content_column=src.get("content_column"),
-            metadata_columns=src.get("metadata_columns", []),
-        ))
+    for i, src in enumerate(raw.get("sources", [])):
+        try:
+            sources.append(SourceConfig(
+                type=src["type"],
+                name=src["name"],
+                path=Path(src["path"]).expanduser(),
+                table=src.get("table"),
+                content_column=src.get("content_column"),
+                metadata_columns=src.get("metadata_columns", []),
+            ))
+        except KeyError as e:
+            raise ValueError(
+                f"Source entry {i} in {path} is missing required field: {e}"
+            ) from e
 
     emb_raw = raw.get("embedding", {})
     embedding = EmbeddingConfig(

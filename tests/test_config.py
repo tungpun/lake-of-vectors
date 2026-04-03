@@ -61,7 +61,7 @@ embedding:
   model: all-MiniLM-L6-v2
 """)
     config = load_config(config_file)
-    assert "~" not in str(config.sources[0].path)
+    assert config.sources[0].path == Path.home() / "notes"
 
 
 def test_load_config_missing_file():
