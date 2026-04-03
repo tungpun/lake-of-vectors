@@ -2,7 +2,7 @@ from openai import OpenAI
 
 
 class APIEmbedder:
-    def __init__(self, model: str = "text-embedding-3-small", api_key: str = ""):
+    def __init__(self, model: str = "text-embedding-3-small", api_key: str | None = None):
         self._model_name = model
         self._client = OpenAI(api_key=api_key)
 
