@@ -250,6 +250,48 @@ Add to `~/.claude/settings.json` (or project-level):
 }
 ```
 
+## Testing & Debugging ChromaDB
+
+### Semantic search (primary)
+
+```bash
+python scripts/search.py "SSRF blind techniques"
+python scripts/search.py "SQL injection bypass" --source security-notes --limit 3
+```
+
+Reads `~/.config/lake-of-embeddings/config.yaml`, embeds the query with the configured backend, and prints ranked results with similarity scores.
+
+### Chunk counts per source
+
+```bash
+lake status
+```
+
+### Inspect raw data via Python REPL
+
+```python
+import chromadb
+client = chromadb.PersistentClient(
+    path="/Users/tungpun/.local/share/lake-of-embeddings/chromadb"
+)
+for col in client.list_collections():
+    print(col.name, "—", col.count(), "chunks")
+    for doc in col.peek(3)["documents"]:
+        print(" ", doc[:120])
+```
+
+### Inspect raw SQLite metadata
+
+```bash
+sqlite3 ~/.local/share/lake-of-embeddings/chromadb/chroma.sqlite3 \
+  "SELECT id, string_value FROM embedding_metadata \
+   WHERE key='chunk_text' LIMIT 5;"
+```
+
+### Why `chroma.sqlite3` exists
+
+ChromaDB uses SQLite as its backing store for collection metadata, document IDs, content hashes, and chunk text. The actual vector embeddings are stored in binary index files alongside it (in the same directory). The `chroma.sqlite3` file is ChromaDB's internal state — do not edit it directly.
+
 ## Dependencies
 
 - `chromadb` — vector database

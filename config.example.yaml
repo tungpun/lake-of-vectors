@@ -1,17 +1,29 @@
+# Lake of Embeddings configuration
+# Copy to ~/.config/lake-of-embeddings/config.yaml and adjust paths
+
 sources:
   - type: markdown
     name: security-notes
-    path: ~/obsidian-vault/32.01. Security/
-  - type: sqlite
-    name: knowledge-db
-    path: ~/knowledge.db
-    table: notes
-    content_column: body
-    metadata_columns: [title, tags, created_at]
-  - type: plaintext
-    name: misc-notes
-    path: ~/notes/
+    path: ~/Library/Mobile Documents/obsidian/
+
+  # Uncomment and adjust for SQLite sources:
+  # - type: sqlite
+  #   name: knowledge-db
+  #   path: ~/knowledge.db
+  #   table: notes
+  #   content_column: body
+  #   metadata_columns: [title, tags, created_at]
+
+  # Uncomment and adjust for plaintext sources:
+  # - type: plaintext
+  #   name: misc-notes
+  #   path: ~/notes/
 
 embedding:
   backend: local
   model: all-MiniLM-L6-v2
+
+  # For OpenAI embeddings, uncomment:
+  # backend: openai
+  # model: text-embedding-3-small
+  # api_key: sk-your-key-here
