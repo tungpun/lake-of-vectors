@@ -107,6 +107,39 @@ def serve(config_path):
 
 @cli.command()
 @click.option("--config", "config_path", default=None, help="Path to config.yaml")
+@click.option("--dry-run", is_flag=True, help="Show what would be deleted without deleting")
+def prune(config_path, dry_run):
+    """Remove ChromaDB collections not present in config."""
+    try:
+        cfg_path = Path(config_path) if config_path else default_config_path()
+        config = load_config(cfg_path)
+    except FileNotFoundError:
+        raise click.ClickException(f"Config file not found: {cfg_path}")
+
+    embedder = _make_embedder(config)
+    engine = SyncEngine(chromadb_path=_chromadb_path(), embedder=embedder)
+
+    known_names = [s.name for s in config.sources]
+    all_sources = engine.list_sources()
+    stale = [name for name in all_sources if name not in set(known_names)]
+
+    if not stale:
+        click.echo("Nothing to prune.")
+        return
+
+    for name in stale:
+        if dry_run:
+            click.echo(f"  would delete: {name}")
+        else:
+            click.echo(f"  deleting: {name}")
+
+    if not dry_run:
+        engine.prune_sources(known_names)
+        click.echo("Done.")
+
+
+@cli.command()
+@click.option("--config", "config_path", default=None, help="Path to config.yaml")
 def status(config_path):
     """Show sync status for all sources."""
     try:

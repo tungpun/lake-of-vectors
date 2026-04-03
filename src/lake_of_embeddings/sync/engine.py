@@ -40,7 +40,7 @@ class SyncEngine:
         if rebuild:
             try:
                 self._client.delete_collection(source_name)
-            except ValueError:
+            except Exception:
                 pass  # Collection doesn't exist yet
 
         collection = self._client.get_or_create_collection(
@@ -172,6 +172,19 @@ class SyncEngine:
         """List all synced source names."""
         collections = self._client.list_collections()
         return [c.name for c in collections]
+
+    def prune_sources(self, known_names: list[str]) -> list[str]:
+        """Delete collections not in known_names. Returns list of deleted names."""
+        known = set(known_names)
+        deleted = []
+        for name in self.list_sources():
+            if name not in known:
+                try:
+                    self._client.delete_collection(name)
+                    deleted.append(name)
+                except Exception:
+                    pass
+        return deleted
 
     def search(
         self,

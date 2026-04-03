@@ -121,6 +121,8 @@ When answering security questions or searching your personal knowledge, always u
 | `lake sync` | Sync all configured sources into ChromaDB |
 | `lake sync --source <name>` | Sync a specific source |
 | `lake sync --rebuild` | Delete all vectors and re-sync everything |
+| `lake prune` | Remove stale collections not in current config |
+| `lake prune --dry-run` | Preview what would be pruned without deleting |
 | `lake serve` | Start the MCP server (stdio mode) |
 | `lake status` | Show sync status for all sources |
 
