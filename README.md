@@ -93,7 +93,7 @@ lake serve
 
 ## Claude Code Integration
 
-Add to `~/.claude/settings.json`:
+Add to `~/.claude/mcp.json` (user-level, all projects):
 
 ```json
 {
@@ -105,6 +105,8 @@ Add to `~/.claude/settings.json`:
   }
 }
 ```
+
+Or add to `.claude/mcp.json` inside a specific project repo to scope it to that project only.
 
 Add to your `CLAUDE.md`:
 

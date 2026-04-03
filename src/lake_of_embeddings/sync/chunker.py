@@ -32,14 +32,14 @@ def _recursive_split(
 
     # Find the best separator that produces splits
     sep = separators[0] if separators else " "
-    remaining_seps = separators[1:] if len(separators) > 1 else separators
+    remaining_seps = separators[1:]  # always a shorter list; empty when on last separator
 
     parts = text.split(sep)
     if len(parts) == 1:
-        # This separator doesn't help, try the next one
-        if remaining_seps and remaining_seps != separators:
+        # This separator doesn't appear in the text — try the next one
+        if remaining_seps:
             return _recursive_split(text, remaining_seps, max_chars, overlap_chars)
-        # Last resort: hard split by character
+        # No separators left: hard split by character
         chunks = []
         start = 0
         while start < len(text):
@@ -86,9 +86,17 @@ def _recursive_split(
     result = []
     for chunk in chunks:
         if len(chunk) > max_chars:
-            result.extend(
-                _recursive_split(chunk, remaining_seps, max_chars, overlap_chars)
-            )
+            if remaining_seps:
+                result.extend(
+                    _recursive_split(chunk, remaining_seps, max_chars, overlap_chars)
+                )
+            else:
+                # No separators left: hard split by character
+                start = 0
+                while start < len(chunk):
+                    end = min(start + max_chars, len(chunk))
+                    result.append(chunk[start:end])
+                    start = end - overlap_chars if end < len(chunk) else end
         else:
             result.append(chunk)
 

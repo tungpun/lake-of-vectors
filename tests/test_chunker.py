@@ -53,3 +53,23 @@ def test_empty_text_returns_empty_list():
 def test_whitespace_only_returns_empty_list():
     chunks = chunk_text("   \n\n  ", max_tokens=500, overlap_tokens=50)
     assert chunks == []
+
+
+def test_no_separator_in_large_text_does_not_recurse():
+    # A long string with no whitespace or punctuation — all separators fail,
+    # must fall back to hard character split without RecursionError.
+    text = "a" * 10000
+    chunks = chunk_text(text, max_tokens=10, overlap_tokens=2)
+    assert len(chunks) > 1
+    assert all(len(c) <= 10 * 4 + 1 for c in chunks)
+
+
+def test_large_real_world_note_does_not_recurse():
+    # Simulates a large note with some structure — regression for the RecursionError
+    # triggered when syncing larger Obsidian vaults.
+    line = "This is a sentence with some words. " * 20
+    text = "\n".join([line] * 100)  # ~72k chars, no double-newlines
+    chunks = chunk_text(text, max_tokens=500, overlap_tokens=50)
+    assert len(chunks) > 1
+    for c in chunks:
+        assert len(c) <= 500 * 4 + 200  # allow a little slack for overlap
