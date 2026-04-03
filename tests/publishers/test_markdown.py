@@ -91,3 +91,16 @@ def test_crawl_skips_empty_files(tmp_path):
 
     assert len(docs) == 1
     assert docs[0].metadata["title"] == "real"
+
+
+def test_document_metadata_has_directory(tmp_path):
+    sub = tmp_path / "security" / "web"
+    sub.mkdir(parents=True)
+    (sub / "xss.md").write_text("# XSS\nContent.")
+    (tmp_path / "root.md").write_text("# Root\nContent.")
+
+    publisher = MarkdownPublisher(path=tmp_path)
+    docs = {d.metadata["relative_path"]: d for d in publisher.crawl()}
+
+    assert docs["security/web/xss.md"].metadata["directory"] == "security/web"
+    assert docs["root.md"].metadata["directory"] == ""

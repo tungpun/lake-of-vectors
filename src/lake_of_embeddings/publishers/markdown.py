@@ -34,7 +34,7 @@ class MarkdownPublisher:
             )
 
     def _extract_title(self, content: str, file_path: Path) -> str:
-        match = re.match(r"^#\s+(.+)$", content, re.MULTILINE)
+        match = re.search(r"^#\s+(.+)$", content, re.MULTILINE)
         if match:
             return match.group(1).strip()
         return file_path.stem
