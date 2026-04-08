@@ -1,4 +1,4 @@
-# Lake of Embeddings
+# Lake of Vectors
 
 Local semantic search over your personal knowledge bases. Index Obsidian notes, SQLite databases, plaintext, and Notion/Confluence (not supported yet) files into ChromaDB, exposed to Claude via an MCP server.
 
@@ -6,7 +6,7 @@ Local semantic search over your personal knowledge bases. Index Obsidian notes, 
 
 - **Multiple Publishers**: Crawl Markdown directories, SQLite tables, and plaintext files
 - **Semantic Search**: Find relevant content by meaning, not just keywords
-- **Local Embeddings**: Runs entirely on your machine with sentence-transformers
+- **Local Vectors**: Runs entirely on your machine with sentence-transformers
 - **OpenAI Support**: Optional OpenAI embeddings if preferred
 - **MCP Server**: Integrates directly with Claude Code for seamless querying
 
