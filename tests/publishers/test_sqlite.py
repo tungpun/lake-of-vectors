@@ -1,8 +1,8 @@
 import sqlite3
 import pytest
 from pathlib import Path
-from lake_of_embeddings.publishers.sqlite import SqlitePublisher
-from lake_of_embeddings.publishers.base import Document, compute_hash
+from lake_of_vectors.publishers.sqlite import SqlitePublisher
+from lake_of_vectors.publishers.base import Document, compute_hash
 
 
 @pytest.fixture

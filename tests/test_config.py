@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from lake_of_embeddings.config import load_config, Config, SourceConfig, EmbeddingConfig
+from lake_of_vectors.config import load_config, Config, SourceConfig, EmbeddingConfig
 
 
 def test_load_config_from_yaml(tmp_path):

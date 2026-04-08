@@ -1,6 +1,6 @@
 import pytest
-from lake_of_embeddings.sync.engine import SyncEngine
-from lake_of_embeddings.publishers.base import Document, compute_hash
+from lake_of_vectors.sync.engine import SyncEngine
+from lake_of_vectors.publishers.base import Document, compute_hash
 
 
 class FakeEmbedder:

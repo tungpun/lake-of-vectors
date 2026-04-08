@@ -16,7 +16,7 @@ A local Python platform that:
 
 ```
 ┌─────────────────────────────────────────────────┐
-│                lake-of-embeddings                │
+│                lake-of-vectors                │
 │                                                  │
 │  ┌──────────┐   ┌──────────┐   ┌─────────────┐  │
 │  │Publishers │──▶│  Sync    │──▶│  ChromaDB   │  │
@@ -105,7 +105,7 @@ Publishers only crawl and yield documents. They have no knowledge of embeddings 
 - One collection per source name (e.g. `security-notes`, `knowledge-db`)
 - Each collection stores vectors, chunk text, and metadata
 - Sync state is derived from ChromaDB itself (no separate state DB)
-- Storage location: `~/.local/share/lake-of-embeddings/chromadb/`
+- Storage location: `~/.local/share/lake-of-vectors/chromadb/`
 
 ## Embedding Backend
 
@@ -157,7 +157,7 @@ The `semantic_search` tool description will include a nudge:
 
 Add to the user's CLAUDE.md or project CLAUDE.md:
 
-> "When answering security questions, always search lake-of-embeddings first."
+> "When answering security questions, always search lake-of-vectors first."
 
 ## CLI
 
@@ -172,7 +172,7 @@ Add to the user's CLAUDE.md or project CLAUDE.md:
 
 ## Configuration
 
-Location: `~/.config/lake-of-embeddings/config.yaml`
+Location: `~/.config/lake-of-vectors/config.yaml`
 
 ```yaml
 sources:
@@ -198,10 +198,10 @@ embedding:
 ## Project Structure
 
 ```
-lake-of-embeddings/
+lake-of-vectors/
 ├── pyproject.toml
 ├── src/
-│   └── lake_of_embeddings/
+│   └── lake_of_vectors/
 │       ├── __init__.py
 │       ├── cli.py              # CLI entry points (click)
 │       ├── config.py           # Load/validate YAML config
@@ -242,7 +242,7 @@ Add to `~/.claude/settings.json` (or project-level):
 ```json
 {
   "mcpServers": {
-    "lake-of-embeddings": {
+    "lake-of-vectors": {
       "command": "lake",
       "args": ["serve"]
     }
@@ -259,7 +259,7 @@ python scripts/search.py "SSRF blind techniques"
 python scripts/search.py "SQL injection bypass" --source security-notes --limit 3
 ```
 
-Reads `~/.config/lake-of-embeddings/config.yaml`, embeds the query with the configured backend, and prints ranked results with similarity scores.
+Reads `~/.config/lake-of-vectors/config.yaml`, embeds the query with the configured backend, and prints ranked results with similarity scores.
 
 ### Chunk counts per source
 
@@ -272,7 +272,7 @@ lake status
 ```python
 import chromadb
 client = chromadb.PersistentClient(
-    path="/Users/tungpun/.local/share/lake-of-embeddings/chromadb"
+    path="/Users/tungpun/.local/share/lake-of-vectors/chromadb"
 )
 for col in client.list_collections():
     print(col.name, "—", col.count(), "chunks")
@@ -283,7 +283,7 @@ for col in client.list_collections():
 ### Inspect raw SQLite metadata
 
 ```bash
-sqlite3 ~/.local/share/lake-of-embeddings/chromadb/chroma.sqlite3 \
+sqlite3 ~/.local/share/lake-of-vectors/chromadb/chroma.sqlite3 \
   "SELECT id, string_value FROM embedding_metadata \
    WHERE key='chunk_text' LIMIT 5;"
 ```

@@ -2,19 +2,19 @@ from pathlib import Path
 
 import click
 
-from lake_of_embeddings.config import load_config, default_config_path, Config
-from lake_of_embeddings.sync.engine import SyncEngine
+from lake_of_vectors.config import load_config, default_config_path, Config
+from lake_of_vectors.sync.engine import SyncEngine
 
 
 def _make_publisher(source_config):
     if source_config.type == "markdown":
-        from lake_of_embeddings.publishers.markdown import MarkdownPublisher
+        from lake_of_vectors.publishers.markdown import MarkdownPublisher
         return MarkdownPublisher(path=source_config.path)
     elif source_config.type == "plaintext":
-        from lake_of_embeddings.publishers.plaintext import PlaintextPublisher
+        from lake_of_vectors.publishers.plaintext import PlaintextPublisher
         return PlaintextPublisher(path=source_config.path)
     elif source_config.type == "sqlite":
-        from lake_of_embeddings.publishers.sqlite import SqlitePublisher
+        from lake_of_vectors.publishers.sqlite import SqlitePublisher
         return SqlitePublisher(
             path=source_config.path,
             table=source_config.table,
@@ -27,10 +27,10 @@ def _make_publisher(source_config):
 
 def _make_embedder(config: Config):
     if config.embedding.backend == "local":
-        from lake_of_embeddings.embeddings.local import LocalEmbedder
+        from lake_of_vectors.embeddings.local import LocalEmbedder
         return LocalEmbedder(model=config.embedding.model)
     elif config.embedding.backend == "openai":
-        from lake_of_embeddings.embeddings.api import APIEmbedder
+        from lake_of_vectors.embeddings.api import APIEmbedder
         if not config.embedding.api_key:
             raise click.ClickException("OpenAI backend requires api_key in config.")
         return APIEmbedder(
@@ -43,7 +43,7 @@ def _make_embedder(config: Config):
 
 
 def _chromadb_path() -> str:
-    path = Path("~/.local/share/lake-of-embeddings/chromadb").expanduser()
+    path = Path("~/.local/share/lake-of-vectors/chromadb").expanduser()
     path.mkdir(parents=True, exist_ok=True)
     return str(path)
 
@@ -91,7 +91,7 @@ def sync(config_path, source, rebuild):
 @click.option("--config", "config_path", default=None, help="Path to config.yaml")
 def serve(config_path):
     """Start the MCP server (stdio mode)."""
-    from lake_of_embeddings.mcp.server import create_mcp_server
+    from lake_of_vectors.mcp.server import create_mcp_server
 
     try:
         cfg_path = Path(config_path) if config_path else default_config_path()

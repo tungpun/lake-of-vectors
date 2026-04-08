@@ -1,10 +1,10 @@
 from mcp.server.fastmcp import FastMCP
 
-from lake_of_embeddings.sync.engine import SyncEngine
+from lake_of_vectors.sync.engine import SyncEngine
 
 
 def create_mcp_server(engine: SyncEngine) -> FastMCP:
-    mcp = FastMCP("lake-of-embeddings")
+    mcp = FastMCP("lake-of-vectors")
 
     @mcp.tool()
     def semantic_search(query: str, source: str = "", limit: int = 10) -> str:

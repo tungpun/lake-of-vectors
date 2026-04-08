@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
-from lake_of_embeddings.publishers.markdown import MarkdownPublisher
-from lake_of_embeddings.publishers.base import Document, compute_hash
+from lake_of_vectors.publishers.markdown import MarkdownPublisher
+from lake_of_vectors.publishers.base import Document, compute_hash
 
 
 def test_crawl_finds_markdown_files(tmp_path):

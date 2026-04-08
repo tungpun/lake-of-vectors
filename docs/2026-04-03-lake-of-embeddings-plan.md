@@ -16,19 +16,19 @@
 |------|---------------|
 | `pyproject.toml` | Package metadata, dependencies, `[project.scripts]` entry point |
 | `config.example.yaml` | Example configuration |
-| `src/lake_of_embeddings/__init__.py` | Package version |
-| `src/lake_of_embeddings/config.py` | Load and validate YAML config |
-| `src/lake_of_embeddings/publishers/base.py` | `Document` dataclass, `Publisher` protocol |
-| `src/lake_of_embeddings/publishers/markdown.py` | `MarkdownPublisher` |
-| `src/lake_of_embeddings/publishers/plaintext.py` | `PlaintextPublisher` |
-| `src/lake_of_embeddings/publishers/sqlite.py` | `SqlitePublisher` |
-| `src/lake_of_embeddings/embeddings/base.py` | `Embedder` protocol |
-| `src/lake_of_embeddings/embeddings/local.py` | `LocalEmbedder` (sentence-transformers) |
-| `src/lake_of_embeddings/embeddings/api.py` | `APIEmbedder` (OpenAI) |
-| `src/lake_of_embeddings/sync/chunker.py` | Recursive text splitter |
-| `src/lake_of_embeddings/sync/engine.py` | Sync orchestrator (diff, chunk, embed, upsert) |
-| `src/lake_of_embeddings/mcp/server.py` | MCP server with `semantic_search` and `list_sources` |
-| `src/lake_of_embeddings/cli.py` | CLI commands (`sync`, `serve`, `status`) |
+| `src/lake_of_vectors/__init__.py` | Package version |
+| `src/lake_of_vectors/config.py` | Load and validate YAML config |
+| `src/lake_of_vectors/publishers/base.py` | `Document` dataclass, `Publisher` protocol |
+| `src/lake_of_vectors/publishers/markdown.py` | `MarkdownPublisher` |
+| `src/lake_of_vectors/publishers/plaintext.py` | `PlaintextPublisher` |
+| `src/lake_of_vectors/publishers/sqlite.py` | `SqlitePublisher` |
+| `src/lake_of_vectors/embeddings/base.py` | `Embedder` protocol |
+| `src/lake_of_vectors/embeddings/local.py` | `LocalEmbedder` (sentence-transformers) |
+| `src/lake_of_vectors/embeddings/api.py` | `APIEmbedder` (OpenAI) |
+| `src/lake_of_vectors/sync/chunker.py` | Recursive text splitter |
+| `src/lake_of_vectors/sync/engine.py` | Sync orchestrator (diff, chunk, embed, upsert) |
+| `src/lake_of_vectors/mcp/server.py` | MCP server with `semantic_search` and `list_sources` |
+| `src/lake_of_vectors/cli.py` | CLI commands (`sync`, `serve`, `status`) |
 | `tests/test_config.py` | Config loading tests |
 | `tests/publishers/test_markdown.py` | MarkdownPublisher tests |
 | `tests/publishers/test_plaintext.py` | PlaintextPublisher tests |
@@ -44,7 +44,7 @@
 
 **Files:**
 - Create: `pyproject.toml`
-- Create: `src/lake_of_embeddings/__init__.py`
+- Create: `src/lake_of_vectors/__init__.py`
 - Create: `config.example.yaml`
 - Create: all `__init__.py` files for subpackages
 
@@ -56,7 +56,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "lake-of-embeddings"
+name = "lake-of-vectors"
 version = "0.1.0"
 description = "Local semantic search over personal knowledge bases"
 requires-python = ">=3.10"
@@ -73,23 +73,23 @@ openai = ["openai>=1.0.0"]
 dev = ["pytest>=8.0.0", "pytest-asyncio>=0.24.0"]
 
 [project.scripts]
-lake = "lake_of_embeddings.cli:cli"
+lake = "lake_of_vectors.cli:cli"
 ```
 
 - [ ] **Step 2: Create package init**
 
 ```python
-# src/lake_of_embeddings/__init__.py
+# src/lake_of_vectors/__init__.py
 __version__ = "0.1.0"
 ```
 
 - [ ] **Step 3: Create all __init__.py files**
 
 Create empty `__init__.py` in:
-- `src/lake_of_embeddings/publishers/__init__.py`
-- `src/lake_of_embeddings/embeddings/__init__.py`
-- `src/lake_of_embeddings/sync/__init__.py`
-- `src/lake_of_embeddings/mcp/__init__.py`
+- `src/lake_of_vectors/publishers/__init__.py`
+- `src/lake_of_vectors/embeddings/__init__.py`
+- `src/lake_of_vectors/sync/__init__.py`
+- `src/lake_of_vectors/mcp/__init__.py`
 - `tests/__init__.py`
 - `tests/publishers/__init__.py`
 
@@ -118,7 +118,7 @@ embedding:
 - [ ] **Step 5: Initialize git and install**
 
 ```bash
-cd /Users/tungpun/Desktop/repos/lake-of-embeddings && \
+cd /Users/tungpun/Desktop/repos/lake-of-vectors && \
   git init && \
   uv pip install -e ".[dev]"
 ```
@@ -128,7 +128,7 @@ cd /Users/tungpun/Desktop/repos/lake-of-embeddings && \
 Run: `lake --help`
 Expected: Will fail (cli.py doesn't exist yet), but the package should be importable:
 ```bash
-python -c "import lake_of_embeddings; print(lake_of_embeddings.__version__)"
+python -c "import lake_of_vectors; print(lake_of_vectors.__version__)"
 ```
 Expected output: `0.1.0`
 
@@ -144,7 +144,7 @@ git add pyproject.toml config.example.yaml src/ tests/ && \
 ### Task 2: Config Loading
 
 **Files:**
-- Create: `src/lake_of_embeddings/config.py`
+- Create: `src/lake_of_vectors/config.py`
 - Create: `tests/test_config.py`
 
 - [ ] **Step 1: Write failing tests for config loading**
@@ -153,7 +153,7 @@ git add pyproject.toml config.example.yaml src/ tests/ && \
 # tests/test_config.py
 import pytest
 from pathlib import Path
-from lake_of_embeddings.config import load_config, Config, SourceConfig, EmbeddingConfig
+from lake_of_vectors.config import load_config, Config, SourceConfig, EmbeddingConfig
 
 
 def test_load_config_from_yaml(tmp_path):
@@ -256,12 +256,12 @@ embedding:
 - [ ] **Step 2: Run tests to verify they fail**
 
 Run: `pytest tests/test_config.py -v`
-Expected: FAIL — `ModuleNotFoundError: No module named 'lake_of_embeddings.config'`
+Expected: FAIL — `ModuleNotFoundError: No module named 'lake_of_vectors.config'`
 
 - [ ] **Step 3: Implement config.py**
 
 ```python
-# src/lake_of_embeddings/config.py
+# src/lake_of_vectors/config.py
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -322,7 +322,7 @@ def load_config(path: Path) -> Config:
 
 
 def default_config_path() -> Path:
-    return Path("~/.config/lake-of-embeddings/config.yaml").expanduser()
+    return Path("~/.config/lake-of-vectors/config.yaml").expanduser()
 ```
 
 - [ ] **Step 4: Run tests to verify they pass**
@@ -333,7 +333,7 @@ Expected: All 6 tests PASS
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/lake_of_embeddings/config.py tests/test_config.py && \
+git add src/lake_of_vectors/config.py tests/test_config.py && \
   git commit -m "feat: add config loading with YAML parsing"
 ```
 
@@ -342,14 +342,14 @@ git add src/lake_of_embeddings/config.py tests/test_config.py && \
 ### Task 3: Publisher Base and MarkdownPublisher
 
 **Files:**
-- Create: `src/lake_of_embeddings/publishers/base.py`
-- Create: `src/lake_of_embeddings/publishers/markdown.py`
+- Create: `src/lake_of_vectors/publishers/base.py`
+- Create: `src/lake_of_vectors/publishers/markdown.py`
 - Create: `tests/publishers/test_markdown.py`
 
 - [ ] **Step 1: Create the base module**
 
 ```python
-# src/lake_of_embeddings/publishers/base.py
+# src/lake_of_vectors/publishers/base.py
 from dataclasses import dataclass
 from typing import Iterator, Protocol, runtime_checkable
 import hashlib
@@ -379,8 +379,8 @@ class Publisher(Protocol):
 # tests/publishers/test_markdown.py
 import pytest
 from pathlib import Path
-from lake_of_embeddings.publishers.markdown import MarkdownPublisher
-from lake_of_embeddings.publishers.base import Document, compute_hash
+from lake_of_vectors.publishers.markdown import MarkdownPublisher
+from lake_of_vectors.publishers.base import Document, compute_hash
 
 
 def test_crawl_finds_markdown_files(tmp_path):
@@ -480,7 +480,7 @@ Expected: FAIL — `ModuleNotFoundError`
 - [ ] **Step 4: Implement MarkdownPublisher**
 
 ```python
-# src/lake_of_embeddings/publishers/markdown.py
+# src/lake_of_vectors/publishers/markdown.py
 import re
 from pathlib import Path
 from typing import Iterator
@@ -531,8 +531,8 @@ Expected: All 9 tests PASS
 - [ ] **Step 6: Commit**
 
 ```bash
-git add src/lake_of_embeddings/publishers/base.py \
-  src/lake_of_embeddings/publishers/markdown.py \
+git add src/lake_of_vectors/publishers/base.py \
+  src/lake_of_vectors/publishers/markdown.py \
   tests/publishers/test_markdown.py && \
   git commit -m "feat: add Document model and MarkdownPublisher"
 ```
@@ -542,7 +542,7 @@ git add src/lake_of_embeddings/publishers/base.py \
 ### Task 4: PlaintextPublisher
 
 **Files:**
-- Create: `src/lake_of_embeddings/publishers/plaintext.py`
+- Create: `src/lake_of_vectors/publishers/plaintext.py`
 - Create: `tests/publishers/test_plaintext.py`
 
 - [ ] **Step 1: Write failing tests**
@@ -551,8 +551,8 @@ git add src/lake_of_embeddings/publishers/base.py \
 # tests/publishers/test_plaintext.py
 import pytest
 from pathlib import Path
-from lake_of_embeddings.publishers.plaintext import PlaintextPublisher
-from lake_of_embeddings.publishers.base import Document, compute_hash
+from lake_of_vectors.publishers.plaintext import PlaintextPublisher
+from lake_of_vectors.publishers.base import Document, compute_hash
 
 
 def test_crawl_finds_txt_files(tmp_path):
@@ -628,7 +628,7 @@ Expected: FAIL — `ModuleNotFoundError`
 - [ ] **Step 3: Implement PlaintextPublisher**
 
 ```python
-# src/lake_of_embeddings/publishers/plaintext.py
+# src/lake_of_vectors/publishers/plaintext.py
 from pathlib import Path
 from typing import Iterator
 
@@ -666,7 +666,7 @@ Expected: All 6 tests PASS
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/lake_of_embeddings/publishers/plaintext.py \
+git add src/lake_of_vectors/publishers/plaintext.py \
   tests/publishers/test_plaintext.py && \
   git commit -m "feat: add PlaintextPublisher"
 ```
@@ -676,7 +676,7 @@ git add src/lake_of_embeddings/publishers/plaintext.py \
 ### Task 5: SqlitePublisher
 
 **Files:**
-- Create: `src/lake_of_embeddings/publishers/sqlite.py`
+- Create: `src/lake_of_vectors/publishers/sqlite.py`
 - Create: `tests/publishers/test_sqlite.py`
 
 - [ ] **Step 1: Write failing tests**
@@ -686,8 +686,8 @@ git add src/lake_of_embeddings/publishers/plaintext.py \
 import sqlite3
 import pytest
 from pathlib import Path
-from lake_of_embeddings.publishers.sqlite import SqlitePublisher
-from lake_of_embeddings.publishers.base import Document, compute_hash
+from lake_of_vectors.publishers.sqlite import SqlitePublisher
+from lake_of_vectors.publishers.base import Document, compute_hash
 
 
 @pytest.fixture
@@ -822,7 +822,7 @@ Expected: FAIL — `ModuleNotFoundError`
 - [ ] **Step 3: Implement SqlitePublisher**
 
 ```python
-# src/lake_of_embeddings/publishers/sqlite.py
+# src/lake_of_vectors/publishers/sqlite.py
 import sqlite3
 from pathlib import Path
 from typing import Iterator
@@ -877,7 +877,7 @@ Expected: All 7 tests PASS
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/lake_of_embeddings/publishers/sqlite.py \
+git add src/lake_of_vectors/publishers/sqlite.py \
   tests/publishers/test_sqlite.py && \
   git commit -m "feat: add SqlitePublisher"
 ```
@@ -887,7 +887,7 @@ git add src/lake_of_embeddings/publishers/sqlite.py \
 ### Task 6: Text Chunker
 
 **Files:**
-- Create: `src/lake_of_embeddings/sync/chunker.py`
+- Create: `src/lake_of_vectors/sync/chunker.py`
 - Create: `tests/test_chunker.py`
 
 - [ ] **Step 1: Write failing tests**
@@ -895,7 +895,7 @@ git add src/lake_of_embeddings/publishers/sqlite.py \
 ```python
 # tests/test_chunker.py
 import pytest
-from lake_of_embeddings.sync.chunker import chunk_text
+from lake_of_vectors.sync.chunker import chunk_text
 
 
 def test_short_text_returns_single_chunk():
@@ -959,7 +959,7 @@ Expected: FAIL — `ModuleNotFoundError`
 - [ ] **Step 3: Implement chunker**
 
 ```python
-# src/lake_of_embeddings/sync/chunker.py
+# src/lake_of_vectors/sync/chunker.py
 
 
 def _estimate_tokens(text: str) -> int:
@@ -1067,7 +1067,7 @@ Expected: All 6 tests PASS
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/lake_of_embeddings/sync/chunker.py tests/test_chunker.py && \
+git add src/lake_of_vectors/sync/chunker.py tests/test_chunker.py && \
   git commit -m "feat: add recursive text chunker"
 ```
 
@@ -1076,14 +1076,14 @@ git add src/lake_of_embeddings/sync/chunker.py tests/test_chunker.py && \
 ### Task 7: Embedding Backends
 
 **Files:**
-- Create: `src/lake_of_embeddings/embeddings/base.py`
-- Create: `src/lake_of_embeddings/embeddings/local.py`
-- Create: `src/lake_of_embeddings/embeddings/api.py`
+- Create: `src/lake_of_vectors/embeddings/base.py`
+- Create: `src/lake_of_vectors/embeddings/local.py`
+- Create: `src/lake_of_vectors/embeddings/api.py`
 
 - [ ] **Step 1: Create the base protocol**
 
 ```python
-# src/lake_of_embeddings/embeddings/base.py
+# src/lake_of_vectors/embeddings/base.py
 from typing import Protocol, runtime_checkable
 
 
@@ -1100,7 +1100,7 @@ class Embedder(Protocol):
 - [ ] **Step 2: Implement LocalEmbedder**
 
 ```python
-# src/lake_of_embeddings/embeddings/local.py
+# src/lake_of_vectors/embeddings/local.py
 from sentence_transformers import SentenceTransformer
 
 
@@ -1121,7 +1121,7 @@ class LocalEmbedder:
 - [ ] **Step 3: Implement APIEmbedder**
 
 ```python
-# src/lake_of_embeddings/embeddings/api.py
+# src/lake_of_vectors/embeddings/api.py
 from openai import OpenAI
 
 
@@ -1141,7 +1141,7 @@ class APIEmbedder:
 
 - [ ] **Step 4: Quick smoke test for LocalEmbedder**
 
-Run: `python -c "from lake_of_embeddings.embeddings.local import LocalEmbedder; e = LocalEmbedder(); r = e.embed(['test']); print(len(r), len(r[0]))"`
+Run: `python -c "from lake_of_vectors.embeddings.local import LocalEmbedder; e = LocalEmbedder(); r = e.embed(['test']); print(len(r), len(r[0]))"`
 Expected: `1 384` (one embedding, 384 dimensions)
 
 Note: First run downloads the model (~80MB). Subsequent runs are instant.
@@ -1149,7 +1149,7 @@ Note: First run downloads the model (~80MB). Subsequent runs are instant.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/lake_of_embeddings/embeddings/ && \
+git add src/lake_of_vectors/embeddings/ && \
   git commit -m "feat: add embedding backends (local + OpenAI API)"
 ```
 
@@ -1158,7 +1158,7 @@ git add src/lake_of_embeddings/embeddings/ && \
 ### Task 8: Sync Engine
 
 **Files:**
-- Create: `src/lake_of_embeddings/sync/engine.py`
+- Create: `src/lake_of_vectors/sync/engine.py`
 - Create: `tests/test_engine.py`
 
 - [ ] **Step 1: Write failing tests**
@@ -1168,8 +1168,8 @@ git add src/lake_of_embeddings/embeddings/ && \
 import pytest
 from pathlib import Path
 from unittest.mock import MagicMock
-from lake_of_embeddings.sync.engine import SyncEngine
-from lake_of_embeddings.publishers.base import Document, compute_hash
+from lake_of_vectors.sync.engine import SyncEngine
+from lake_of_vectors.publishers.base import Document, compute_hash
 
 
 class FakeEmbedder:
@@ -1363,15 +1363,15 @@ Expected: FAIL — `ModuleNotFoundError`
 - [ ] **Step 3: Implement sync engine**
 
 ```python
-# src/lake_of_embeddings/sync/engine.py
+# src/lake_of_vectors/sync/engine.py
 from dataclasses import dataclass
 from typing import Iterator
 
 import chromadb
 
-from lake_of_embeddings.embeddings.base import Embedder
-from lake_of_embeddings.publishers.base import Document
-from lake_of_embeddings.sync.chunker import chunk_text
+from lake_of_vectors.embeddings.base import Embedder
+from lake_of_vectors.publishers.base import Document
+from lake_of_vectors.sync.chunker import chunk_text
 
 
 @dataclass
@@ -1585,7 +1585,7 @@ Expected: All 10 tests PASS
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/lake_of_embeddings/sync/engine.py tests/test_engine.py && \
+git add src/lake_of_vectors/sync/engine.py tests/test_engine.py && \
   git commit -m "feat: add sync engine with diff, chunk, embed, upsert"
 ```
 
@@ -1594,7 +1594,7 @@ git add src/lake_of_embeddings/sync/engine.py tests/test_engine.py && \
 ### Task 9: MCP Server
 
 **Files:**
-- Create: `src/lake_of_embeddings/mcp/server.py`
+- Create: `src/lake_of_vectors/mcp/server.py`
 - Create: `tests/test_mcp_server.py`
 
 - [ ] **Step 1: Write failing tests**
@@ -1603,7 +1603,7 @@ git add src/lake_of_embeddings/sync/engine.py tests/test_engine.py && \
 # tests/test_mcp_server.py
 import pytest
 from unittest.mock import MagicMock, patch
-from lake_of_embeddings.mcp.server import create_mcp_server
+from lake_of_vectors.mcp.server import create_mcp_server
 
 
 @pytest.fixture
@@ -1633,7 +1633,7 @@ def mock_engine():
 def test_create_mcp_server_returns_fastmcp(mock_engine):
     mcp = create_mcp_server(mock_engine)
     assert mcp is not None
-    assert mcp.name == "lake-of-embeddings"
+    assert mcp.name == "lake-of-vectors"
 
 
 def test_server_has_semantic_search_tool(mock_engine):
@@ -1656,14 +1656,14 @@ Expected: FAIL — `ModuleNotFoundError`
 - [ ] **Step 3: Implement MCP server**
 
 ```python
-# src/lake_of_embeddings/mcp/server.py
+# src/lake_of_vectors/mcp/server.py
 from mcp.server.fastmcp import FastMCP
 
-from lake_of_embeddings.sync.engine import SyncEngine
+from lake_of_vectors.sync.engine import SyncEngine
 
 
 def create_mcp_server(engine: SyncEngine) -> FastMCP:
-    mcp = FastMCP("lake-of-embeddings")
+    mcp = FastMCP("lake-of-vectors")
 
     @mcp.tool()
     def semantic_search(
@@ -1732,7 +1732,7 @@ Expected: All 3 tests PASS
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/lake_of_embeddings/mcp/server.py tests/test_mcp_server.py && \
+git add src/lake_of_vectors/mcp/server.py tests/test_mcp_server.py && \
   git commit -m "feat: add MCP server with semantic_search and list_sources tools"
 ```
 
@@ -1741,7 +1741,7 @@ git add src/lake_of_embeddings/mcp/server.py tests/test_mcp_server.py && \
 ### Task 10: CLI
 
 **Files:**
-- Create: `src/lake_of_embeddings/cli.py`
+- Create: `src/lake_of_vectors/cli.py`
 - Create: `tests/test_cli.py`
 
 - [ ] **Step 1: Write failing tests**
@@ -1750,7 +1750,7 @@ git add src/lake_of_embeddings/mcp/server.py tests/test_mcp_server.py && \
 # tests/test_cli.py
 import pytest
 from click.testing import CliRunner
-from lake_of_embeddings.cli import cli
+from lake_of_vectors.cli import cli
 
 
 @pytest.fixture
@@ -1813,25 +1813,25 @@ Expected: FAIL — `ModuleNotFoundError`
 - [ ] **Step 3: Implement CLI**
 
 ```python
-# src/lake_of_embeddings/cli.py
+# src/lake_of_vectors/cli.py
 import sys
 from pathlib import Path
 
 import click
 
-from lake_of_embeddings.config import load_config, default_config_path, Config
-from lake_of_embeddings.sync.engine import SyncEngine
+from lake_of_vectors.config import load_config, default_config_path, Config
+from lake_of_vectors.sync.engine import SyncEngine
 
 
 def _make_publisher(source_config):
     if source_config.type == "markdown":
-        from lake_of_embeddings.publishers.markdown import MarkdownPublisher
+        from lake_of_vectors.publishers.markdown import MarkdownPublisher
         return MarkdownPublisher(path=source_config.path)
     elif source_config.type == "plaintext":
-        from lake_of_embeddings.publishers.plaintext import PlaintextPublisher
+        from lake_of_vectors.publishers.plaintext import PlaintextPublisher
         return PlaintextPublisher(path=source_config.path)
     elif source_config.type == "sqlite":
-        from lake_of_embeddings.publishers.sqlite import SqlitePublisher
+        from lake_of_vectors.publishers.sqlite import SqlitePublisher
         return SqlitePublisher(
             path=source_config.path,
             table=source_config.table,
@@ -1844,10 +1844,10 @@ def _make_publisher(source_config):
 
 def _make_embedder(config: Config):
     if config.embedding.backend == "local":
-        from lake_of_embeddings.embeddings.local import LocalEmbedder
+        from lake_of_vectors.embeddings.local import LocalEmbedder
         return LocalEmbedder(model=config.embedding.model)
     elif config.embedding.backend == "openai":
-        from lake_of_embeddings.embeddings.api import APIEmbedder
+        from lake_of_vectors.embeddings.api import APIEmbedder
         if not config.embedding.api_key:
             raise click.ClickException("OpenAI backend requires api_key in config.")
         return APIEmbedder(
@@ -1860,7 +1860,7 @@ def _make_embedder(config: Config):
 
 
 def _chromadb_path() -> str:
-    path = Path("~/.local/share/lake-of-embeddings/chromadb").expanduser()
+    path = Path("~/.local/share/lake-of-vectors/chromadb").expanduser()
     path.mkdir(parents=True, exist_ok=True)
     return str(path)
 
@@ -1908,7 +1908,7 @@ def sync(config_path, source, rebuild):
 @click.option("--config", "config_path", default=None, help="Path to config.yaml")
 def serve(config_path):
     """Start the MCP server (stdio mode)."""
-    from lake_of_embeddings.mcp.server import create_mcp_server
+    from lake_of_vectors.mcp.server import create_mcp_server
 
     try:
         cfg_path = Path(config_path) if config_path else default_config_path()
@@ -1964,7 +1964,7 @@ lake status --help
 - [ ] **Step 6: Commit**
 
 ```bash
-git add src/lake_of_embeddings/cli.py tests/test_cli.py && \
+git add src/lake_of_vectors/cli.py tests/test_cli.py && \
   git commit -m "feat: add CLI commands (sync, serve, status)"
 ```
 
@@ -1981,8 +1981,8 @@ git add src/lake_of_embeddings/cli.py tests/test_cli.py && \
 # tests/test_integration.py
 import pytest
 from pathlib import Path
-from lake_of_embeddings.publishers.markdown import MarkdownPublisher
-from lake_of_embeddings.sync.engine import SyncEngine
+from lake_of_vectors.publishers.markdown import MarkdownPublisher
+from lake_of_vectors.sync.engine import SyncEngine
 
 
 class FakeEmbedder:
@@ -2146,7 +2146,7 @@ chromadb/
 
 ```yaml
 # Lake of Embeddings configuration
-# Copy to ~/.config/lake-of-embeddings/config.yaml and adjust paths
+# Copy to ~/.config/lake-of-vectors/config.yaml and adjust paths
 
 sources:
   - type: markdown
@@ -2179,8 +2179,8 @@ embedding:
 - [ ] **Step 3: Create the user's config directory and copy config**
 
 ```bash
-mkdir -p ~/.config/lake-of-embeddings && \
-  cp config.example.yaml ~/.config/lake-of-embeddings/config.yaml
+mkdir -p ~/.config/lake-of-vectors && \
+  cp config.example.yaml ~/.config/lake-of-vectors/config.yaml
 ```
 
 - [ ] **Step 4: Commit**
@@ -2222,7 +2222,7 @@ Add to `~/.claude/settings.json` under `mcpServers`:
 ```json
 {
   "mcpServers": {
-    "lake-of-embeddings": {
+    "lake-of-vectors": {
       "command": "lake",
       "args": ["serve"]
     }
@@ -2235,7 +2235,7 @@ Add to `~/.claude/settings.json` under `mcpServers`:
 Add to `~/.claude/CLAUDE.md`:
 
 ```
-When answering security questions, always search lake-of-embeddings first.
+When answering security questions, always search lake-of-vectors first.
 ```
 
 - [ ] **Step 5: Test the MCP server manually**

@@ -1,5 +1,5 @@
 import pytest
-from lake_of_embeddings.sync.chunker import chunk_text
+from lake_of_vectors.sync.chunker import chunk_text
 
 
 def test_short_text_returns_single_chunk():

@@ -1,5 +1,5 @@
 # Lake of Embeddings configuration
-# Copy to ~/.config/lake-of-embeddings/config.yaml and adjust paths
+# Copy to ~/.config/lake-of-vectors/config.yaml and adjust paths
 
 sources:
   - type: markdown

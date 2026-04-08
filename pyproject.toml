@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "lake-of-embeddings"
+name = "lake-of-vectors"
 version = "0.1.0"
 description = "Local semantic search over personal knowledge bases"
 requires-python = ">=3.10"
@@ -20,4 +20,4 @@ openai = ["openai>=1.0.0"]
 dev = ["pytest>=8.0.0", "pytest-asyncio>=0.24.0"]
 
 [project.scripts]
-lake = "lake_of_embeddings.cli:cli"
+lake = "lake_of_vectors.cli:cli"

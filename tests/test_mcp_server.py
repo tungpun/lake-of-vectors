@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-from lake_of_embeddings.mcp.server import create_mcp_server
+from lake_of_vectors.mcp.server import create_mcp_server
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ def mock_engine():
 def test_create_mcp_server_returns_fastmcp(mock_engine):
     mcp = create_mcp_server(mock_engine)
     assert mcp is not None
-    assert mcp.name == "lake-of-embeddings"
+    assert mcp.name == "lake-of-vectors"
 
 
 def test_server_has_semantic_search_tool(mock_engine):

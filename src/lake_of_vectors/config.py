@@ -66,4 +66,4 @@ def load_config(path: Path) -> Config:
 
 
 def default_config_path() -> Path:
-    return Path("~/.config/lake-of-embeddings/config.yaml").expanduser()
+    return Path("~/.config/lake-of-vectors/config.yaml").expanduser()

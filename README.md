@@ -21,11 +21,11 @@ uv pip install -e .
 Copy the example config and adjust paths for your sources:
 
 ```bash
-mkdir -p ~/.config/lake-of-embeddings
-cp config.example.yaml ~/.config/lake-of-embeddings/config.yaml
+mkdir -p ~/.config/lake-of-vectors
+cp config.example.yaml ~/.config/lake-of-vectors/config.yaml
 ```
 
-Edit `~/.config/lake-of-embeddings/config.yaml`:
+Edit `~/.config/lake-of-vectors/config.yaml`:
 
 ```yaml
 sources:
@@ -96,7 +96,7 @@ lake serve
 Register as a global MCP server using the Claude Code CLI:
 
 ```bash
-claude mcp add -s user lake-of-embeddings $(pwd)/.venv/bin/lake serve
+claude mcp add -s user lake-of-vectors $(pwd)/.venv/bin/lake serve
 ```
 
 The `-s user` scope makes it available in all sessions. Restart Claude Code after running.
@@ -106,7 +106,7 @@ To scope it to a single project instead, add a `.mcp.json` file in the project r
 ```json
 {
   "mcpServers": {
-    "lake-of-embeddings": {
+    "lake-of-vectors": {
       "command": "lake",
       "args": ["serve"]
     }
@@ -117,7 +117,7 @@ To scope it to a single project instead, add a `.mcp.json` file in the project r
 Add to your `CLAUDE.md`:
 
 ```
-When answering security questions or searching your personal knowledge, always use lake-of-embeddings semantic_search first.
+When answering security questions or searching your personal knowledge, always use lake-of-vectors semantic_search first.
 ```
 
 ## CLI Commands
@@ -132,11 +132,19 @@ When answering security questions or searching your personal knowledge, always u
 | `lake serve` | Start the MCP server (stdio mode) |
 | `lake status` | Show sync status for all sources |
 
+## Data
+
+ChromaDB vectors are stored at:
+
+```
+~/.local/share/lake-of-vectors/chromadb
+```
+
 ## Architecture
 
 ```
   ┌──────────────────────────────────────────────────────────────────┐
-  │                      lake-of-embeddings                          │                                                                   
+  │                      lake-of-vectors                             │                                                                   
   │                                                                  │
   │  ┌─────────────┐   ┌──────────────────┐   ┌──────────────────┐   │                                                                    
   │  │  Publishers │──▶│   Sync Engine    │──▶│    ChromaDB      │   │                                                                    

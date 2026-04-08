@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
-from lake_of_embeddings.publishers.plaintext import PlaintextPublisher
-from lake_of_embeddings.publishers.base import Document, compute_hash
+from lake_of_vectors.publishers.plaintext import PlaintextPublisher
+from lake_of_vectors.publishers.base import Document, compute_hash
 
 
 def test_crawl_finds_txt_files(tmp_path):

@@ -11,15 +11,15 @@ Usage:
 import argparse
 from pathlib import Path
 
-from lake_of_embeddings.config import load_config, default_config_path
-from lake_of_embeddings.embeddings.local import LocalEmbedder
-from lake_of_embeddings.sync.engine import SyncEngine
+from lake_of_vectors.config import load_config, default_config_path
+from lake_of_vectors.embeddings.local import LocalEmbedder
+from lake_of_vectors.sync.engine import SyncEngine
 
-CHROMADB_PATH = Path("~/.local/share/lake-of-embeddings/chromadb").expanduser()
+CHROMADB_PATH = Path("~/.local/share/lake-of-vectors/chromadb").expanduser()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Search lake-of-embeddings")
+    parser = argparse.ArgumentParser(description="Search lake-of-vectors")
     parser.add_argument("query", help="Search query")
     parser.add_argument("--source", default=None, help="Limit to a specific source name")
     parser.add_argument("--limit", type=int, default=5, help="Number of results (default: 5)")
@@ -30,7 +30,7 @@ def main():
     if config.embedding.backend == "local":
         embedder = LocalEmbedder(model=config.embedding.model)
     elif config.embedding.backend == "openai":
-        from lake_of_embeddings.embeddings.api import APIEmbedder
+        from lake_of_vectors.embeddings.api import APIEmbedder
         embedder = APIEmbedder(model=config.embedding.model, api_key=config.embedding.api_key)
     else:
         raise SystemExit(f"Unknown embedding backend: {config.embedding.backend}")

@@ -21,3 +21,4 @@ chromadb/
 
 # OS
 .DS_Store
+.claude/

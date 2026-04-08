@@ -1,6 +1,6 @@
 import pytest
 from click.testing import CliRunner
-from lake_of_embeddings.cli import cli
+from lake_of_vectors.cli import cli
 
 
 @pytest.fixture

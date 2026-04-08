@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
-from lake_of_embeddings.publishers.markdown import MarkdownPublisher
-from lake_of_embeddings.sync.engine import SyncEngine
+from lake_of_vectors.publishers.markdown import MarkdownPublisher
+from lake_of_vectors.sync.engine import SyncEngine
 
 
 class FakeEmbedder:

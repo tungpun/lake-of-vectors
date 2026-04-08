@@ -3,9 +3,9 @@ from typing import Iterator
 
 import chromadb
 
-from lake_of_embeddings.embeddings.base import Embedder
-from lake_of_embeddings.publishers.base import Document
-from lake_of_embeddings.sync.chunker import chunk_text
+from lake_of_vectors.embeddings.base import Embedder
+from lake_of_vectors.publishers.base import Document
+from lake_of_vectors.sync.chunker import chunk_text
 
 
 @dataclass
