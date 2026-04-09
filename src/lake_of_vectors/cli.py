@@ -161,16 +161,20 @@ def search(query, config_path, source, limit):
 
     from rich.console import Console
     from rich.panel import Panel
-    from rich.text import Text
+
+    _SOURCE_COLORS = ["cyan", "green", "yellow", "magenta", "blue", "red"]
+    source_names = list(dict.fromkeys(r["source_name"] for r in results))
+    source_color = {name: _SOURCE_COLORS[i % len(_SOURCE_COLORS)] for i, name in enumerate(source_names)}
 
     console = Console()
     for i, r in enumerate(results, 1):
         meta = r["metadata"]
         source_name = r["source_name"]
+        color = source_color[source_name]
         title = meta.get("title") or meta.get("source_id", "")
         score = 1 - r["distance"]
-        header = f"[dim][{i}][/dim] [bold]{source_name}[/bold] — {title}  [dim](score: {score:.3f})[/dim]"
-        console.print(Panel(r["chunk_text"][:400], title=header, title_align="left"))
+        header = f"[dim][{i}][/dim] [{color}]{source_name}[/{color}] — {title}  [dim](score: {score:.3f})[/dim]"
+        console.print(Panel(r["chunk_text"][:400], title=header, title_align="left", border_style=color))
 
 
 @cli.command()
