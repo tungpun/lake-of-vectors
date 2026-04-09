@@ -2,10 +2,17 @@
 
 Local semantic search over personal knowledge bases (Obsidian, SQLite, plaintext). Indexes into ChromaDB, exposed to Claude via MCP.
 
+## Agent Workflow
+
+At session start: read `STATUS.md` (feature state) and `TASKS.md` (current tasks).
+At session end: update `TASKS.md` — mark completed tasks, add new ones, append a session note.
+
 ## Docs
 
-- `docs/2026-04-03-lake-of-embeddings-design.md` — design spec and motivation
-- `docs/2026-04-03-lake-of-embeddings-plan.md` — implementation plan
+- `features-list.md` — implemented vs. planned features
+- `tasks-list.md` — structured task list for agents
+- `docs/design.md` — design spec and motivation
+- `docs/plan.md` — implementation plan
 
 ## Setup
 
